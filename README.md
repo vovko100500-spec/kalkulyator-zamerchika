@@ -11,14 +11,19 @@ npm run dev
 
 ## Продакшен
 
-Сайт публикуется на GitHub Pages при пуше в `main`.
+**URL:** https://dist-sage-eight-45.vercel.app
 
-**URL:** https://vovko100500-spec.github.io/kalkulyator-zamerchika/
+Пересборка и деплой:
+
+```bash
+npm run build
+npx vercel deploy dist --prod --yes
+```
 
 ### Telegram Mini App
 
 В [@BotFather](https://t.me/BotFather) укажите Web App URL:
 
 ```
-https://vovko100500-spec.github.io/kalkulyator-zamerchika/
+https://dist-sage-eight-45.vercel.app
 ```
