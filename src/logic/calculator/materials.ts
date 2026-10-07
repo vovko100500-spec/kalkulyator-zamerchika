@@ -2,6 +2,7 @@ import type { PriceCatalog } from '../../types/catalog';
 import type { MaterialLineItem, MaterialsResult } from '../../types/calculation';
 import type { MeasurementInput } from '../../types/measurement';
 import { POST_LABELS, RAIL_LABELS } from '../formatters/labels';
+import { calculateBulkMaterials } from './bulkMaterials';
 import { calculateGeometry } from './geometry';
 
 const SHEET_USEFUL_WIDTH: Record<'sheet_c8' | 'sheet_mp20', number> = {
@@ -9,9 +10,6 @@ const SHEET_USEFUL_WIDTH: Record<'sheet_c8' | 'sheet_mp20', number> = {
   sheet_mp20: 1.1,
 };
 
-const STONE_VOLUME_NET_M3 = 0.033;
-const STONE_DENSITY_KG_M3 = 1450;
-const STONE_RESERVE_FACTOR = 1.1;
 const SCREW_RESERVE_FACTOR = 1.1;
 const PICKET_PITCH_M = 0.13;
 const PICKET_DOUBLE_FACTOR = 1.85;
@@ -42,11 +40,10 @@ export function calculateMaterials(
   catalog: PriceCatalog,
 ): MaterialsResult {
   const geometry = calculateGeometry(input);
+  const bulk = calculateBulkMaterials(input, geometry);
   const sheetsCount = getSheetsCount(input, geometry.netLength);
   const picketCount = getPicketCount(input, geometry.netLength);
-  const totalStoneKg = Math.ceil(
-    geometry.totalPostsCount * STONE_VOLUME_NET_M3 * STONE_DENSITY_KG_M3 * STONE_RESERVE_FACTOR,
-  );
+  const { totalStoneKg, totalCementKg, totalSandKg, totalNetVolumeM3 } = bulk;
   const screwsCount = Math.ceil(
     sheetsCount * input.railRows * 4 * SCREW_RESERVE_FACTOR,
   );
@@ -125,6 +122,30 @@ export function calculateMaterials(
     });
   }
 
+  if (input.foundationType === 'concreting' && totalCementKg > 0) {
+    const cementPrice = catalog.materials.cementPerKg;
+    items.push({
+      id: 'cement',
+      name: 'Цемент М500 (раствор под столбы)',
+      quantity: totalCementKg,
+      unit: 'кг',
+      unitPrice: cementPrice,
+      totalPrice: totalCementKg * cementPrice,
+    });
+  }
+
+  if (input.foundationType === 'concreting' && totalSandKg > 0) {
+    const sandPrice = catalog.materials.sandPerKg;
+    items.push({
+      id: 'sand',
+      name: 'Песок (раствор под столбы)',
+      quantity: totalSandKg,
+      unit: 'кг',
+      unitPrice: sandPrice,
+      totalPrice: totalSandKg * sandPrice,
+    });
+  }
+
   if (screwsCount > 0) {
     const unitPrice = catalog.materials.screwEach;
     items.push({
@@ -167,7 +188,10 @@ export function calculateMaterials(
     geometry,
     sheetsCount,
     picketCount,
+    totalNetVolumeM3,
     totalStoneKg,
+    totalCementKg,
+    totalSandKg,
     screwsCount,
     capsCount,
     items,

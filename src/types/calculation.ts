@@ -16,7 +16,10 @@ export interface MaterialsResult {
   geometry: GeometryResult;
   sheetsCount: number;
   picketCount: number;
+  totalNetVolumeM3: number;
   totalStoneKg: number;
+  totalCementKg: number;
+  totalSandKg: number;
   screwsCount: number;
   capsCount: number;
   items: MaterialLineItem[];

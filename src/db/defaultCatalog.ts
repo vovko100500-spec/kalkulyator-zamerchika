@@ -23,6 +23,8 @@ export const defaultCatalog: PriceCatalog = {
       grid_3d: { 1.5: 3200, 1.8: 3600, 2.0: 4000, 2.2: 4400, 2.5: 4800 },
     },
     stonePerKg: 8,
+    cementPerKg: 12,
+    sandPerKg: 4,
     screwEach: 3,
     capEach: 25,
     generatorRent: 3500,

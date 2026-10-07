@@ -409,13 +409,29 @@ export function PriceSettingsModal({ open, onClose }: PriceSettingsModalProps) {
                 open={openSections.bulk}
                 onToggle={() => toggleSection('bulk')}
               >
-                <PriceField
-                  label="Щебень для забутовки"
-                  value={draft.materials.stonePerKg}
-                  onChange={(value) => updateMaterialScalar('stonePerKg', value)}
-                  suffix="₽/кг"
-                  step={0.1}
-                />
+                <div className="grid gap-4">
+                  <PriceField
+                    label="Щебень для забутовки"
+                    value={draft.materials.stonePerKg}
+                    onChange={(value) => updateMaterialScalar('stonePerKg', value)}
+                    suffix="₽/кг"
+                    step={0.1}
+                  />
+                  <PriceField
+                    label="Цемент М500"
+                    value={draft.materials.cementPerKg}
+                    onChange={(value) => updateMaterialScalar('cementPerKg', value)}
+                    suffix="₽/кг"
+                    step={0.1}
+                  />
+                  <PriceField
+                    label="Песок"
+                    value={draft.materials.sandPerKg}
+                    onChange={(value) => updateMaterialScalar('sandPerKg', value)}
+                    suffix="₽/кг"
+                    step={0.1}
+                  />
+                </div>
               </Accordion>
             </div>
           ) : null}

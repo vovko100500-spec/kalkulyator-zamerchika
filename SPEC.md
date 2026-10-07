@@ -118,25 +118,31 @@ picketCount = Math.ceil(netLength / 0.13) × 1.85
 
 ### 3.4. Сыпучие материалы и расходники
 
-**Забутовка щебнем**
-
-- Объём лунки Ø200 мм:
+Лунка Ø200 мм. Чистый объём на один столб:
 
 ```
-V = π × 0.1² × holeDepth ≈ 0.0314 × 1.2 = 0.0377 м³
+V_hole = π × 0.1² × holeDepth
+V_post = postWidth × postHeight × holeDepth
+V_net = max(0, V_hole − V_post)
 ```
 
-- За вычетом трубы 60×60:
+Сечение столба берётся из `postType`; для воротных/калиточных — 80×80 мм.
+
+**Забутовка щебнем** (`foundationType = ramming_stone`):
 
 ```
-V_net ≈ 0.0377 - (0.06 × 0.06 × 1.2) ≈ 0.033 м³
+totalNetVolumeM3 = Σ V_net по всем столбам
+totalStoneKg = ceil(totalNetVolumeM3 × 1450 × 1.10)
 ```
 
-- Общий вес щебня (10% запас):
+**Бетонирование, цементно-песчаный раствор** (`foundationType = concreting`):
 
 ```
-totalStoneKg = totalPosts × 0.033 × 1450 × 1.10
+totalCementKg = ceil(totalNetVolumeM3 × 300 × 1.10)
+totalSandKg   = ceil(totalNetVolumeM3 × 900 × 1.10)
 ```
+
+Для винтовых свай (`screw_piles`) сыпучка не считается.
 
 **Саморезы кровельные**
 

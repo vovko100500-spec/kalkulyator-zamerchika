@@ -38,6 +38,8 @@ function mergeCatalogWithDefaults(catalog: PriceCatalog): PriceCatalog {
         ...defaultCatalog.materials.sheet,
         ...catalog.materials.sheet,
       },
+      cementPerKg: catalog.materials.cementPerKg ?? defaultCatalog.materials.cementPerKg,
+      sandPerKg: catalog.materials.sandPerKg ?? defaultCatalog.materials.sandPerKg,
     },
     labor: {
       ...defaultCatalog.labor,

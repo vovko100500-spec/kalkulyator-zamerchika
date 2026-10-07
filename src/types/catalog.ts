@@ -6,6 +6,8 @@ export interface MaterialPrices {
   railStock6m: Record<RailType, number>;
   sheet: Record<SheetingType, Record<FenceHeight, number>>;
   stonePerKg: number;
+  cementPerKg: number;
+  sandPerKg: number;
   screwEach: number;
   capEach: number;
   generatorRent: number;

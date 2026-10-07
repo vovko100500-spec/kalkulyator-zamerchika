@@ -2,6 +2,8 @@ import type { CalculationResult } from '../../types/calculation';
 import { POST_LABELS, RAIL_LABELS, SHEETING_LABELS } from './labels';
 
 export const STONE_BAG_KG = 25;
+export const CEMENT_BAG_KG = 50;
+export const SAND_BAG_KG = 25;
 
 export function formatProcurementList(result: CalculationResult): string {
   const { input, geometry, materials } = result;
@@ -56,9 +58,18 @@ export function formatProcurementList(result: CalculationResult): string {
     );
   }
 
-  if (input.foundationType === 'concreting') {
-    const concreteBags = Math.ceil(geometry.totalPostsCount * 2);
-    lines.push(`• Пескобетон М300 — ${concreteBags} мешков (по 25 кг, ориентир)`);
+  if (input.foundationType === 'concreting' && materials.totalCementKg > 0) {
+    const cementBags = Math.ceil(materials.totalCementKg / CEMENT_BAG_KG);
+    lines.push(
+      `• Цемент М500 — ${cementBags} мешков (по ${CEMENT_BAG_KG} кг, ~${materials.totalCementKg} кг)`,
+    );
+  }
+
+  if (input.foundationType === 'concreting' && materials.totalSandKg > 0) {
+    const sandBags = Math.ceil(materials.totalSandKg / SAND_BAG_KG);
+    lines.push(
+      `• Песок — ${sandBags} мешков (по ${SAND_BAG_KG} кг, ~${materials.totalSandKg} кг)`,
+    );
   }
 
   if (input.noElectricity) {

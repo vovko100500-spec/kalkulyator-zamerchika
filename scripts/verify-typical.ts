@@ -11,7 +11,7 @@ const typicalInput: MeasurementInput = {
   railType: 'pipe_40x20x2',
   railRows: 2,
   foundationType: 'ramming_stone',
-  holeDepth: 1.2,
+  holeDepth: 1.5,
   gatesType: 'sliding_4m',
   gatesAutomation: false,
   wicketsCount: 1,

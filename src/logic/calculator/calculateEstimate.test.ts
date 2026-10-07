@@ -83,11 +83,11 @@ describe('calculateEstimate — типовой объект', () => {
     expect(result.materials.sheetsCount).toBe(48);
     expect(result.materials.screwsCount).toBe(423);
     expect(result.materials.capsCount).toBe(26);
-    expect(result.materials.totalStoneKg).toBe(1369);
-    expect(result.materials.totalCost).toBe(165_571);
+    expect(result.materials.totalStoneKg).toBe(1185);
+    expect(result.materials.totalCost).toBe(164_099);
     expect(result.labor.totalCost).toBe(69_250);
-    expect(result.financial.totalCost).toBe(242_821);
-    expect(result.financial.recommendedPrice).toBe(373_571);
-    expect(result.financial.profit).toBe(130_750);
+    expect(result.financial.totalCost).toBe(241_349);
+    expect(result.financial.recommendedPrice).toBe(371_306);
+    expect(result.financial.profit).toBe(129_957);
   });
 });
