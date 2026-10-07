@@ -11,16 +11,19 @@ npm run dev
 
 ## Продакшен
 
-**URL:** https://vovko100500-spec.github.io/kalkulyator-zamerchika/
+**URL:** https://kalkulyator-zamerchika.vercel.app
 
 Репозиторий: https://github.com/vovko100500-spec/kalkulyator-zamerchika
 
-Деплой на GitHub Pages выполняется автоматически при push в `main` (workflow `.github/workflows/deploy.yml`). Сборка использует `GITHUB_PAGES_BASE=/kalkulyator-zamerchika/`.
+Хостинг: Vercel (`pravo-resh-test/kalkulyator-zamerchika`). Деплой при push в `main` — автоматически. Ручной деплой:
+
+```bash
+vercel deploy --prod --yes
+```
 
 Локальная проверка прод-сборки:
 
 ```bash
-set GITHUB_PAGES_BASE=/kalkulyator-zamerchika/
 npm run build
 npm run preview
 ```
@@ -30,7 +33,7 @@ npm run preview
 В [@BotFather](https://t.me/BotFather) → ваш бот → **Bot Settings** → **Menu Button** или **Web App** укажите URL:
 
 ```
-https://vovko100500-spec.github.io/kalkulyator-zamerchika/
+https://kalkulyator-zamerchika.vercel.app
 ```
 
 HTTPS обязателен; ноутбук для работы приложения не нужен.
