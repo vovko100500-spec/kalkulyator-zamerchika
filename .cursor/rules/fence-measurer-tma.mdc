@@ -1,0 +1,56 @@
+---
+description: Калькулятор замерщика — TMA/PWA для замерщиков заборов и ворот
+alwaysApply: true
+---
+
+# Role & Project Context
+
+You are a Senior Frontend Engineer building a high-precision, offline-first Telegram Mini App (TMA / PWA) for fence and gate field measurers ("Калькулятор замерщика").
+
+# Tech Stack
+
+- Framework: React 18/19 with TypeScript (Strict mode)
+- Bundler: Vite
+- Styling: Tailwind CSS (Mobile-first, Telegram Theme CSS variables integration)
+- State Management: Zustand (with persist middleware)
+- Local DB: Dexie.js (IndexedDB for offline pricing & saved estimates)
+- Icons: Lucide React
+- Telegram Integration: @telegram-apps/sdk-react
+
+# Core Engineering Principles
+
+## 1. Pure Calculation Engine
+
+- All calculation formulas must live in `/src/logic/calculator/` as pure, deterministic functions without UI or state dependencies.
+- Every formula must strictly match the mathematical specifications in `SPEC.md`.
+- Never approximate metal cuts or round down quantities of materials. Always round up (`Math.ceil`) to commercial stock units (e.g. 6-meter commercial pipes).
+
+```typescript
+// ❌ BAD — rounds down, couples UI with math
+const pipes = Math.floor(length / 6);
+const total = useStore.getState().price * pipes;
+
+// ✅ GOOD — pure function, ceil to stock units
+export function calcPipeCount(lengthM: number, stockLengthM = 6): number {
+  return Math.ceil(lengthM / stockLengthM);
+}
+```
+
+## 2. Offline-First
+
+- The app MUST be fully functional without an internet connection.
+- All pricing catalogs, labor rates, and draft estimates are stored and read from IndexedDB/LocalStorage.
+- Do not add features that require network at runtime unless explicitly requested.
+
+## 3. Mobile-First & Field UX
+
+- Target environment: Smartphones used on outdoor construction sites (often under direct sunlight or with gloves).
+- Touch targets must be at least 44×44px.
+- Minimize typing: prioritize large buttons, steppers, toggle segmented controls, and sensible presets over free-form text inputs.
+- Dark/Light mode support respecting Telegram's native theme (`--tg-theme-*` CSS variables).
+
+## 4. Code Quality
+
+- Strict TypeScript: no `any`; explicit interfaces for all entities (`MeasurementInput`, `MaterialItem`, `LaborItem`, `CalculationResult`).
+- Clean modular architecture: clear boundary between Calculation Core, State Store, and View Components.
+- UI components must not contain business formulas; stores orchestrate persistence and call pure logic functions.
