@@ -20,6 +20,7 @@ export interface MaterialsResult {
   totalStoneKg: number;
   totalCementKg: number;
   totalSandKg: number;
+  totalGravelKg: number;
   screwsCount: number;
   capsCount: number;
   items: MaterialLineItem[];

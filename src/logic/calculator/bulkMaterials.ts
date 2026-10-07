@@ -6,9 +6,10 @@ export const HOLE_DIAMETER_M = 0.2;
 const HOLE_RADIUS_M = HOLE_DIAMETER_M / 2;
 
 const STONE_DENSITY_KG_M3 = 1450;
-/** Цементно-песчаный раствор М200: кг на 1 м³ чистого объёма лунки. */
+/** Бетон М200 (1 : 3 : 4 по массе): кг на 1 м³ чистого объёма лунки. */
 const CEMENT_KG_PER_M3 = 300;
 const SAND_KG_PER_M3 = 900;
+const GRAVEL_KG_PER_M3 = 1200;
 const BULK_RESERVE_FACTOR = 1.1;
 
 const POST_CROSS_SECTION_M2: Record<PostType, number> = {
@@ -23,9 +24,12 @@ const GATE_POST_CROSS_SECTION_M2 = 0.08 * 0.08;
 
 export interface BulkMaterialsResult {
   totalNetVolumeM3: number;
+  /** Щебень для забутовки (ramming_stone). */
   totalStoneKg: number;
   totalCementKg: number;
   totalSandKg: number;
+  /** Щебень в составе бетона (concreting). */
+  totalGravelKg: number;
 }
 
 export function calcNetHoleVolumeM3(holeDepth: HoleDepth, postCrossSectionM2: number): number {
@@ -51,6 +55,7 @@ export function calculateBulkMaterials(
       totalStoneKg: 0,
       totalCementKg: 0,
       totalSandKg: 0,
+      totalGravelKg: 0,
     };
   }
 
@@ -60,13 +65,16 @@ export function calculateBulkMaterials(
       totalStoneKg: Math.ceil(totalNetVolumeM3 * STONE_DENSITY_KG_M3 * BULK_RESERVE_FACTOR),
       totalCementKg: 0,
       totalSandKg: 0,
+      totalGravelKg: 0,
     };
   }
 
+  const reserve = totalNetVolumeM3 * BULK_RESERVE_FACTOR;
   return {
     totalNetVolumeM3,
     totalStoneKg: 0,
-    totalCementKg: Math.ceil(totalNetVolumeM3 * CEMENT_KG_PER_M3 * BULK_RESERVE_FACTOR),
-    totalSandKg: Math.ceil(totalNetVolumeM3 * SAND_KG_PER_M3 * BULK_RESERVE_FACTOR),
+    totalCementKg: Math.ceil(reserve * CEMENT_KG_PER_M3),
+    totalSandKg: Math.ceil(reserve * SAND_KG_PER_M3),
+    totalGravelKg: Math.ceil(reserve * GRAVEL_KG_PER_M3),
   };
 }

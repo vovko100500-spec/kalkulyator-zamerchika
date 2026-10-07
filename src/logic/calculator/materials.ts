@@ -43,7 +43,7 @@ export function calculateMaterials(
   const bulk = calculateBulkMaterials(input, geometry);
   const sheetsCount = getSheetsCount(input, geometry.netLength);
   const picketCount = getPicketCount(input, geometry.netLength);
-  const { totalStoneKg, totalCementKg, totalSandKg, totalNetVolumeM3 } = bulk;
+  const { totalStoneKg, totalCementKg, totalSandKg, totalGravelKg, totalNetVolumeM3 } = bulk;
   const screwsCount = Math.ceil(
     sheetsCount * input.railRows * 4 * SCREW_RESERVE_FACTOR,
   );
@@ -126,7 +126,7 @@ export function calculateMaterials(
     const cementPrice = catalog.materials.cementPerKg;
     items.push({
       id: 'cement',
-      name: 'Цемент М500 (раствор под столбы)',
+      name: 'Цемент М500 (бетон под столбы)',
       quantity: totalCementKg,
       unit: 'кг',
       unitPrice: cementPrice,
@@ -138,11 +138,23 @@ export function calculateMaterials(
     const sandPrice = catalog.materials.sandPerKg;
     items.push({
       id: 'sand',
-      name: 'Песок (раствор под столбы)',
+      name: 'Песок (бетон под столбы)',
       quantity: totalSandKg,
       unit: 'кг',
       unitPrice: sandPrice,
       totalPrice: totalSandKg * sandPrice,
+    });
+  }
+
+  if (input.foundationType === 'concreting' && totalGravelKg > 0) {
+    const unitPrice = catalog.materials.stonePerKg;
+    items.push({
+      id: 'gravel',
+      name: 'Щебень фр. 5–20 (бетон под столбы)',
+      quantity: totalGravelKg,
+      unit: 'кг',
+      unitPrice,
+      totalPrice: totalGravelKg * unitPrice,
     });
   }
 
@@ -192,6 +204,7 @@ export function calculateMaterials(
     totalStoneKg,
     totalCementKg,
     totalSandKg,
+    totalGravelKg,
     screwsCount,
     capsCount,
     items,

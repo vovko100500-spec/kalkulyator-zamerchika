@@ -37,9 +37,10 @@ describe('bulkMaterials', () => {
     expect(bulk.totalStoneKg).toBe(1185);
     expect(bulk.totalCementKg).toBe(0);
     expect(bulk.totalSandKg).toBe(0);
+    expect(bulk.totalGravelKg).toBe(0);
   });
 
-  it('считает цемент и песок для бетонирования', () => {
+  it('считает цемент, песок и щебень для бетонирования', () => {
     const input: MeasurementInput = {
       ...baseInput,
       foundationType: 'concreting',
@@ -49,9 +50,13 @@ describe('bulkMaterials', () => {
     const geometry = calculateGeometry(input);
     const bulk = calculateBulkMaterials(input, geometry);
 
+    expect(bulk.totalNetVolumeM3).toBeCloseTo(1.072, 2);
     expect(bulk.totalStoneKg).toBe(0);
-    expect(bulk.totalCementKg).toBeGreaterThan(0);
+    expect(bulk.totalCementKg).toBe(354);
+    expect(bulk.totalSandKg).toBe(1062);
+    expect(bulk.totalGravelKg).toBe(1416);
     expect(bulk.totalSandKg).toBeGreaterThan(bulk.totalCementKg);
+    expect(bulk.totalGravelKg).toBeGreaterThan(bulk.totalSandKg);
   });
 
   it('не считает сыпучку для винтовых свай', () => {
@@ -66,5 +71,6 @@ describe('bulkMaterials', () => {
     expect(bulk.totalStoneKg).toBe(0);
     expect(bulk.totalCementKg).toBe(0);
     expect(bulk.totalSandKg).toBe(0);
+    expect(bulk.totalGravelKg).toBe(0);
   });
 });

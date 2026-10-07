@@ -411,7 +411,7 @@ export function PriceSettingsModal({ open, onClose }: PriceSettingsModalProps) {
               >
                 <div className="grid gap-4">
                   <PriceField
-                    label="Щебень для забутовки"
+                    label="Щебень (забутовка / бетон)"
                     value={draft.materials.stonePerKg}
                     onChange={(value) => updateMaterialScalar('stonePerKg', value)}
                     suffix="₽/кг"

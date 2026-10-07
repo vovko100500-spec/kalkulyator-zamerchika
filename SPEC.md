@@ -135,11 +135,13 @@ totalNetVolumeM3 = Σ V_net по всем столбам
 totalStoneKg = ceil(totalNetVolumeM3 × 1450 × 1.10)
 ```
 
-**Бетонирование, цементно-песчаный раствор** (`foundationType = concreting`):
+**Бетонирование, бетон М200** (`foundationType = concreting`, пропорция 1 : 3 : 4 по массе):
 
 ```
-totalCementKg = ceil(totalNetVolumeM3 × 300 × 1.10)
-totalSandKg   = ceil(totalNetVolumeM3 × 900 × 1.10)
+reserveM3     = totalNetVolumeM3 × 1.10
+totalCementKg = ceil(reserveM3 × 300)
+totalSandKg   = ceil(reserveM3 × 900)
+totalGravelKg = ceil(reserveM3 × 1200)
 ```
 
 Для винтовых свай (`screw_piles`) сыпучка не считается.
